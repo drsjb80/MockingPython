@@ -19,7 +19,7 @@ __builtins__.input = save_input
 # ----------------------------------------------------------------------
 
 # now, use patch that automatically saves and restores
-mock = MagicMock(return_value="wirled")
+mock = MagicMock(return_value="whirled")
 with patch('builtins.input', mock):
     answer = input()
     print("Hello " + answer + "!")
@@ -47,13 +47,13 @@ with patch('builtins.print', mock):
 # ----------------------------------------------------------------------
 
 # now, combine the two to do I/O
-input_mock = MagicMock(return_value="wirled")
+input_mock = MagicMock(return_value="whirled")
 output_mock = MagicMock()
 with patch('builtins.input', input_mock):
     with patch('builtins.print', output_mock):
         answer = input()
         print("Hello " + answer + "!")
-        output_mock.assert_called_once_with("Hello wirled!")
+        output_mock.assert_called_once_with("Hello whirled!")
 
 # ----------------------------------------------------------------------
 
@@ -68,6 +68,6 @@ output_mock.reset_mock()
 def foo():
     answer = input()
     print("Hello " + answer + "!")
-    output_mock.assert_called_once_with("Hello wirled!")
+    output_mock.assert_called_once_with("Hello whirled!")
 
 foo()
