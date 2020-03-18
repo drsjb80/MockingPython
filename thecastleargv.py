@@ -10,7 +10,7 @@ class TestArgs(unittest.TestCase):
         parser = argparse.ArgumentParser()
         parser.add_argument('--foo', action='store_true')
         args = parser.parse_args()
-        print(args)
+
         self.assertTrue('foo' in args)
         self.assertFalse('bar' in args)
         self.assertEqual(args.foo, True)
