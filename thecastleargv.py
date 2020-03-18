@@ -29,3 +29,11 @@ class TestArgs(unittest.TestCase):
         args = parser.parse_args()
         self.assertTrue('bar' in args.foo)
         self.assertTrue('baz' in args.foo)
+
+    def test_multiple(self):
+        sys.argv = ["thecastleargv", "--foo", "bar", "--foo", "baz"]
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--foo', action='append')
+        args = parser.parse_args()
+        self.assertTrue('bar' in args.foo)
+        self.assertTrue('baz' in args.foo)
