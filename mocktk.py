@@ -1,6 +1,6 @@
 import tkinter
 from unittest import TestCase
-from unittest.mock import call, PropertyMock
+from unittest.mock import call, PropertyMock, patch
 
 # https://docs.python.org/3/library/tkinter.html#a-simple-hello-world-program
 # with some cleanup.
@@ -34,13 +34,13 @@ class Testtkinter(TestCase):
     # better to break into two methods to more closely track the calls to
     # the PropertyMock as seen with the two calls to pack.
     def test_create_widgets(self):
-        root = tkinter.Tk()
-        tkinter.Button = PropertyMock()
-        app = Application(master=root)
-        app.create_widgets()
-        # print(tkinter.Button.mock_calls)
-        tkinter.Button.assert_has_calls([ \
-            call().__setitem__('text', 'Hello World\n(click me)'), \
-            call().pack(side='top'), \
-            call().pack(side='bottom') \
-        ], any_order=True)
+        with patch("tkinter.Button", new_callable=PropertyMock) as mock_button:
+            root = tkinter.Tk()
+            app = Application(master=root)
+            app.create_widgets()
+            # print(tkinter.Button.mock_calls)
+            mock_button.assert_has_calls([ \
+                call().__setitem__('text', 'Hello World\n(click me)'), \
+                call().pack(side='top'), \
+                call().pack(side='bottom') \
+            ], any_order=True)
