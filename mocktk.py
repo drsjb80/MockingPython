@@ -1,8 +1,9 @@
 import tkinter
-import unittest
-import unittest.mock
-from  unittest.mock import call
+from unittest import TestCase
+from unittest.mock import call, PropertyMock
 
+# https://docs.python.org/3/library/tkinter.html#a-simple-hello-world-program
+# with some cleanup.
 class Application(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -11,16 +12,16 @@ class Application(tkinter.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.hi_there = tkinter.Button(self)
-        self.hi_there["text"] = "Hello World\n(click me)"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
+        hi_there = tkinter.Button(self)
+        hi_there["text"] = "Hello World\n(click me)"
+        hi_there["command"] = self.say_hi
+        hi_there.pack(side="top")
 
-        self.quit = tkinter.Button(self, text="QUIT", fg="red",
-                              command=self.master.destroy)
-        self.quit.pack(side="bottom")
+        quit = tkinter.Button(self, text="QUIT", fg="red", \
+            command=self.master.destroy)
+        quit.pack(side="bottom")
 
-    def say_hi(self):
+    def say_hi():
         print("hi there, everyone!")
 
 if __name__ == "__main__":
@@ -28,14 +29,18 @@ if __name__ == "__main__":
     app = Application(master=root)
     app.mainloop()
 
-class Testtkinter(unittest.TestCase):
+class Testtkinter(TestCase):
+    # there are two buttons created in create_widgets; it would probably be
+    # better to break into two methods to more closely track the calls to
+    # the PropertyMock as seen with the two calls to pack.
     def test_create_widgets(self):
         root = tkinter.Tk()
-        tkinter.Button = unittest.mock.PropertyMock()
+        tkinter.Button = PropertyMock()
         app = Application(master=root)
         app.create_widgets()
         # print(tkinter.Button.mock_calls)
         tkinter.Button.assert_has_calls([ \
             call().__setitem__('text', 'Hello World\n(click me)'), \
-            call().pack(side='top') \
+            call().pack(side='top'), \
+            call().pack(side='bottom') \
         ], any_order=True)
