@@ -1,6 +1,6 @@
 import tkinter
 from unittest import TestCase
-from unittest.mock import call, PropertyMock, patch
+from unittest.mock import call, patch, MagicMock
 
 # https://docs.python.org/3/library/tkinter.html#a-simple-hello-world-program
 # with some cleanup.
@@ -32,9 +32,9 @@ if __name__ == "__main__":
 class Testtkinter(TestCase):
     # there are two buttons created in create_widgets; it would probably be
     # better to break into two methods to more closely track the calls to
-    # the PropertyMock as seen with the two calls to pack.
+    # the MagicMock as seen with the two calls to pack.
     def test_create_widgets(self):
-        with patch("tkinter.Button", new_callable=PropertyMock) as mock_button:
+        with patch("tkinter.Button", new_callable=MagicMock) as mock_button:
             root = tkinter.Tk()
             app = Application(master=root)
             app.create_widgets()
