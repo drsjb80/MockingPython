@@ -11,9 +11,9 @@ class ThreadSafeList():
         self.list.append(element)
         self.lock.release()
 
-    def extend(self, list):
+    def extend(self, elements):
         self.lock.acquire()
-        self.list.extend(list)
+        self.list.extend(elements)
         self.lock.release()
 
     def rotate(self):
